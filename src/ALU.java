@@ -21,11 +21,12 @@ public class ALU {
 			isMinus = false;
 			tmpNum = number;
 		}
-		// 下面对绝对值进行处理
+		// 下面对绝对值进行处理  
 		int n = Integer.valueOf(tmpNum);
-		while (n >= 1) {
+		while (n > 0) {
 			result.insert(0, String.valueOf(n % 2));
-			n = (n - n % 2) / 2;
+			//n = (n - n * 2) / 2;
+			n = n / 2;
 		}
 		// 若是负数,取反加一
 		if (isMinus) {
@@ -85,27 +86,26 @@ public class ALU {
 		if (n != 0) {
 			while (n >= 1) {
 				beforeDot.insert(0, String.valueOf(n % 2));
-				n = (n - n % 2) / 2;
+				n = n / 2;
 			}
 		}
 		// 生成小数部分的二进制表示(若有)
 		StringBuilder afterDot = new StringBuilder();
 		if (strs.length > 1) {
-			float m = (float) (Integer.valueOf(strs[1])) * (float) Math.pow(10, -1 * strs[1].length());
-			// if (m == 0) {
-			// afterDot = new StringBuilder(allZeroWithLength(eLength + sLength + 1));
-			// } else {
-			// 最后一个1是为了能最后向0舍入
-
-			do {
-				if ((m *= 2) >= 1) {
-					m -= 1;
-					afterDot.append("1");
-				} else {
-					afterDot.append("0");
-				}
-			} while (m != 1 && beforeDot.length() + afterDot.length() <= eLength + sLength + 1 + 1);
-			// }
+			float m = (float) (Integer.valueOf(strs[1])) * (float) Math.pow(10, strs[1].length());
+			if (m == 0) {
+				afterDot = new StringBuilder(allZeroWithLength(eLength + sLength + 1));
+			} else {
+				// 最后一个1是为了能最后向0舍入
+				do {
+					if ((m *= 2) >= 1) {
+						m -= 1;
+						afterDot.append("1");
+					} else {
+						afterDot.append("0");
+					}
+				} while (m != 1 && beforeDot.length() + afterDot.length() <= eLength + sLength + 1 + 1);
+			}
 		}
 		// 是否要规格化?
 		// 拼接整数和小数,且算出指数
